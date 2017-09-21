@@ -1,0 +1,71 @@
+Object:	DBToList
+		Functions:	connectToDatabase
+				readDatabase
+				writeToClassLists
+
+Object:	ClassLists
+	Variables:	HashMap Classes classesComplete
+			HashMap Classes classesNeeded
+		Functions:	getClassDescription
+				getClassDepartment
+				getClassNumber
+				getClassCategory
+
+Object:	Classes
+	Variables:	String description
+			String department
+			int number
+			char category
+
+From here, the User Interface can draw data to fill in the charts, bars, and graphs as we see fit.
+For example, data for the ring chart we had centered would be:
+------------------------------------------------------------------------
+int CompleteRing1kCounter=0;
+int CompleteRing2kCounter=0;
+int CompleteRing3kCounter=0;
+int CompleteRing4kCounter=0;
+for(Classes : classesComplete){
+	switch(this.Classes.getClassDepartment){
+		>3999
+			ring4kCounter++;
+			break;
+		>2999
+			ring3kCounter++;
+			break;
+		>1999
+			ring2kCounter++;
+			break;
+		default
+			ring1kCounter++;
+			break;
+	}
+}
+
+int NeededRing1kCounter = 0;
+int NeededRing2kCounter = 0;
+int NeededRing3kCounter = 0;
+int NeededRing4kCounter = 0;
+for(Classes : classesNeeded){
+	switch(this.Classes.getClassDepartment){
+		>3999
+			ring4kCounter++;
+			break;
+		>2999
+			ring3kCounter++;
+			break;
+		>1999
+			ring2kCounter++;
+			break;
+		default
+			ring1kCounter++;
+			break;
+	}
+}
+
+double ring1Percent = (double)NeededRing1kCounter/CompleteRing1kCounter;
+double ring2Percent = (double)NeededRing2kCounter/CompleteRing2kCounter;
+double ring3Percent = (double)NeededRing3kCounter/CompleteRing3kCounter;
+double ring4Percent = (double)NeededRing4kCounter/CompleteRing4kCounter;
+
+------------------------------------------------------------------------
+We can shorten this up and make more efficient using some static arrays since it's a definite number of rings to calculate for, this is just early pseudocode example given the design we're looking at.
