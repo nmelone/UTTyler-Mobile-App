@@ -17,9 +17,9 @@ public class SummaryActivity extends AppCompatActivity {
         ProgressBar overallProgress = (ProgressBar)findViewById(R.id.overallProgressBar);
         //setting progress
         //TODO use data from Database
-        coreProgress.setProgress(80);
-        degreeProgress.setProgress(90);
-        overallProgress.setProgress(85);
+        coreProgress.setProgress((int)(Math.random()*100));
+        degreeProgress.setProgress((int)(Math.random()*100));
+        overallProgress.setProgress((int)(Math.random()*100));
         //creating percent labels
         TextView corePercent = (TextView)findViewById(R.id.corePercent);
         TextView degreePercent = (TextView)findViewById(R.id.degreePercent);
