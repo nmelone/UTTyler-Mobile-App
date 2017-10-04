@@ -1,2 +1,2 @@
 # UTTyler-Mobile-App
-This a rework of the myUTTyler website into a mobile friendly version.
+This is a mobile app to display a mobile, user-friendly version of the Patriot Advisement Report (PAR)
