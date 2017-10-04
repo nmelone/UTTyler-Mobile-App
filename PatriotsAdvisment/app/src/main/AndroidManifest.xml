@@ -6,6 +6,7 @@
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
     <uses-permission android:name="android.permission.READ_PROFILE" />
     <uses-permission android:name="android.permission.READ_CONTACTS" />
+    <uses-permission android:name="android.permission.CALL_PHONE"/>
 
     <application
         android:allowBackup="true"
@@ -23,11 +24,13 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".SummaryActivity"
-            android:parentActivityName=".LoginActivity">
-
-        </activity>
-        <activity android:name=".CoursesActivity"
+        <activity
+            android:name=".SummaryActivity"
+            android:parentActivityName=".LoginActivity"></activity>
+        <activity
+            android:name=".CoursesActivity"
+            android:parentActivityName=".SummaryActivity" />
+        <activity android:name=".AdvisorActivity"
             android:parentActivityName=".SummaryActivity"></activity>
     </application>
 

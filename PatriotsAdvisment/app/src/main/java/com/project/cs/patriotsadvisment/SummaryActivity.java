@@ -13,6 +13,8 @@ import com.github.lzyzsd.circleprogress.DonutProgress;
 
 public class SummaryActivity extends AppCompatActivity {
 
+    TextView advisorTextView;
+    public static final String EXTRA_ADVISOR = "com.project.cs.patriotsadvisment.ADVISOR";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,9 +50,20 @@ public class SummaryActivity extends AppCompatActivity {
         //TODO use data from Database
         student.setText("John Smith");
 
+        //advisor info
+        advisorTextView = (TextView)findViewById(R.id.advisornameTextView);
+        advisorTextView.setText("Kay Pleasant");
+
     }
     public void startCourses(View myView){
         Intent intent = new Intent(this,CoursesActivity.class);
+        startActivity(intent);
+    }
+
+    public void startAdvisor(View myView){
+        Intent intent = new Intent(this,AdvisorActivity.class);
+        String advisor = advisorTextView.getText().toString();
+        intent.putExtra(EXTRA_ADVISOR, advisor);
         startActivity(intent);
     }
 }
