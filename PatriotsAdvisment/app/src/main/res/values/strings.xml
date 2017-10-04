@@ -17,9 +17,5 @@
     <string name="degree">Degree</string>
     <string name="overall">Overall</string>
     <string name="student">Placeholder Student</string>
-    <string-array name="freshman">
-        <item>Freshman</item>
-        <item>Class 1</item>
-        <item>Class 2</item>
-    </string-array>
+    <string name="gpalabel">GPA</string>
 </resources>
