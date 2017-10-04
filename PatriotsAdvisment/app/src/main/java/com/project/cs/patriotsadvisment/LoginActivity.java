@@ -336,8 +336,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
             if (success) {
                 //TODO send to SummaryActivity when login is successful
-                Intent i = new Intent(null, SummaryActivity.class);
-                startActivity(i);
+                toSummary();
                 finish();
             } else {
                 mPasswordView.setError(getString(R.string.error_incorrect_password));
@@ -350,6 +349,10 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             mAuthTask = null;
             showProgress(false);
         }
+    }
+    public void toSummary(){
+        Intent intent = new Intent(this, SummaryActivity.class);
+        startActivity(intent);
     }
 }
 

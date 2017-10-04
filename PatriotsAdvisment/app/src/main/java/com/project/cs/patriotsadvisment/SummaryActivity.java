@@ -1,7 +1,10 @@
 package com.project.cs.patriotsadvisment;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -34,5 +37,9 @@ public class SummaryActivity extends AppCompatActivity {
         //TODO use data from Database
         student.setText("John Smith");
 
+    }
+    public void startCourses(View myView){
+        Intent intent = new Intent(this,CoursesActivity.class);
+        startActivity(intent);
     }
 }
