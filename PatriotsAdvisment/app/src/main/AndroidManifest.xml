@@ -30,7 +30,7 @@
         <activity
             android:name=".CoursesActivity"
             android:parentActivityName=".SummaryActivity" />
-        <activity android:name=".AdvisorActivity"
+        <activity android:name=".AdviserActivity"
             android:parentActivityName=".SummaryActivity"></activity>
     </application>
 

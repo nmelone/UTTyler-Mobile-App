@@ -335,7 +335,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             showProgress(false);
 
             if (success) {
-                //TODO send to SummaryActivity when login is successful
                 toSummary();
                 finish();
             } else {
@@ -350,7 +349,9 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             showProgress(false);
         }
     }
+    //Used to start the Summary Screen after successful login
     public void toSummary(){
+        //TODO add any data to the intent as needed
         Intent intent = new Intent(this, SummaryActivity.class);
         startActivity(intent);
     }

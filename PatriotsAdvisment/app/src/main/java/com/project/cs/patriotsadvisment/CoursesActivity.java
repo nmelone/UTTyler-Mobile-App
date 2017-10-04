@@ -37,24 +37,27 @@ public class CoursesActivity extends Activity {
     }
 
     private void prepareListData(){
+        //the lists for the headers and children
         listCoursesHeader = new ArrayList<String>();
         listCoursesChild = new HashMap<String, List<String>>();
 
+        //adding all the headers to the header list
         listCoursesHeader.add("Freshman Courses");
-        listCoursesHeader.add("Sophmore Courses");
+        listCoursesHeader.add("Sopohmore Courses");
         listCoursesHeader.add("Junior Courses");
         listCoursesHeader.add("Senior Courses");
 
         //final program will use a for loop to add all the proper data
+        //TODO change all the adding to a loop that gets data from database
         List<String> freshman = new ArrayList<String>();
         freshman.add("English 101");
         freshman.add("Math 101");
         freshman.add("History 101");
 
-        List<String> sophmore = new ArrayList<String>();
-        sophmore.add("English 201");
-        sophmore.add("Math 201");
-        sophmore.add("History 201");
+        List<String> sophomore = new ArrayList<String>();
+        sophomore.add("English 201");
+        sophomore.add("Math 201");
+        sophomore.add("History 201");
 
         List<String> junior = new ArrayList<String>();
         junior.add("Physics 301");
@@ -65,8 +68,10 @@ public class CoursesActivity extends Activity {
         senior.add("Slacking off 101");
         senior.add("Graduating LOL");
         senior.add("Fuckitall.exe");
+
+        //putting all the children into the right list
         listCoursesChild.put(listCoursesHeader.get(0), freshman);
-        listCoursesChild.put(listCoursesHeader.get(1), sophmore);
+        listCoursesChild.put(listCoursesHeader.get(1), sophomore);
         listCoursesChild.put(listCoursesHeader.get(2), junior);
         listCoursesChild.put(listCoursesHeader.get(3), senior);
     }
