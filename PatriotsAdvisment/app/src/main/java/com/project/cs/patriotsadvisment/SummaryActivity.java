@@ -9,7 +9,7 @@ import android.widget.TextView;
 
 import com.github.lzyzsd.circleprogress.DonutProgress;
 
-public class SummaryActivity extends AppCompatActivity {
+public class SummaryActivity extends AppCompatActivity implements AsyncResponse{
 
     private TextView adviserTextView;
     public static final String EXTRA_ADVISER = "com.project.cs.patriotsadvisment.ADVISER";
@@ -68,10 +68,15 @@ public class SummaryActivity extends AppCompatActivity {
 
     //used to call the Adviser Screen
     public void startAdvisor(View myView){
-        //TODO add any data tot he intent as needed
+        //TODO add any data to the intent as needed
         Intent intent = new Intent(this,AdviserActivity.class);
         String advisor = adviserTextView.getText().toString();
         intent.putExtra(EXTRA_ADVISER, advisor);
         startActivity(intent);
+    }
+
+    @Override
+    public void processFinish(String output) {
+        //TODO Do something with the string from the database
     }
 }

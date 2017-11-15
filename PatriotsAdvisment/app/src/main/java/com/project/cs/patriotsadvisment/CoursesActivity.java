@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class CoursesActivity extends Activity {
+public class CoursesActivity extends Activity implements AsyncResponse{
 
     android.widget.ExpandableListAdapter listAdapter;
     ExpandableListView coursesEL;
@@ -74,5 +74,10 @@ public class CoursesActivity extends Activity {
         listCoursesChild.put(listCoursesHeader.get(1), sophomore);
         listCoursesChild.put(listCoursesHeader.get(2), junior);
         listCoursesChild.put(listCoursesHeader.get(3), senior);
+    }
+
+    @Override
+    public void processFinish(String output) {
+        //TODO add code to handle string from databasee
     }
 }
