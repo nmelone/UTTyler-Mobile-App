@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.github.lzyzsd.circleprogress.DonutProgress;
 
@@ -58,6 +59,14 @@ public class SummaryActivity extends AppCompatActivity implements AsyncResponse{
         student.setText("John Smith");
         adviserTextView.setText("Kay Pleasant");
 
+
+
+
+        DBconn myconn = new DBconn(this);
+        myconn.delegate = SummaryActivity.this;
+        myconn.execute("query","desc student;");
+
+
     }
     //used to call the Courses Screen
     public void startCourses(View myView){
@@ -78,5 +87,6 @@ public class SummaryActivity extends AppCompatActivity implements AsyncResponse{
     @Override
     public void processFinish(String output) {
         //TODO Do something with the string from the database
+        Toast.makeText(this, output,Toast.LENGTH_LONG).show();
     }
 }

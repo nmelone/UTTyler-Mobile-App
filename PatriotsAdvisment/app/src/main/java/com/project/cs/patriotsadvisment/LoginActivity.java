@@ -77,6 +77,7 @@ public class LoginActivity extends AppCompatActivity implements AsyncResponse{
 
         if(output.equals("success\n")){
             toSummary();
+            finish();
         }else{
             Toast toast= Toast.makeText(LoginActivity.this, "Login Error", Toast.LENGTH_SHORT);
             toast.show();
@@ -85,9 +86,10 @@ public class LoginActivity extends AppCompatActivity implements AsyncResponse{
 
     //Used to start the Summary Screen after successful login
     public void toSummary(){
-        //TODO add any data to the intent as needed
+
         Intent intent = new Intent(this, SummaryActivity.class);
         startActivity(intent);
+       
     }
 }
 
