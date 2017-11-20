@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class CoursesActivity extends Activity implements AsyncResponse{
+public class CoursesActivity extends Activity {
 
     android.widget.ExpandableListAdapter listAdapter;
     ExpandableListView coursesEL;
@@ -47,6 +47,7 @@ public class CoursesActivity extends Activity implements AsyncResponse{
         listCoursesHeader.add("Junior Courses");
         listCoursesHeader.add("Senior Courses");
 
+
         //final program will use a for loop to add all the proper data
         //TODO change all the adding to a loop that gets data from database
         List<String> freshman = new ArrayList<String>();
@@ -76,8 +77,5 @@ public class CoursesActivity extends Activity implements AsyncResponse{
         listCoursesChild.put(listCoursesHeader.get(3), senior);
     }
 
-    @Override
-    public void processFinish(String output) {
-        //TODO add code to handle string from databasee
-    }
+
 }

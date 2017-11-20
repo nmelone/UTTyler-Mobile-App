@@ -10,15 +10,53 @@ import android.widget.Toast;
 
 import com.github.lzyzsd.circleprogress.DonutProgress;
 
-public class SummaryActivity extends AppCompatActivity implements AsyncResponse{
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.concurrent.ExecutionException;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+public class SummaryActivity extends AppCompatActivity{
 
     private TextView adviserTextView;
-    public static final String EXTRA_ADVISER = "com.project.cs.patriotsadvisment.ADVISER";
 
+    public static final String EXTRA_ADVISER = "com.project.cs.patriotsadvisment.ADVISER";
+    String rawQuery;
+    String stuName;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_summary);
+
+        String email = getIntent().getExtras().getString("email");
+
+        DBconn myconn = new DBconn(this);
+
+        try {
+            rawQuery = myconn.execute("query","select * from student where email = '"+ email + "';").get();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+        ArrayList<String> studentarry = parseTheData(rawQuery);
+        stuName = studentarry.get(studentarry.indexOf("fname")+1) + " " + studentarry.get(studentarry.indexOf("lname")+1);
+
+        try {
+            myconn = new DBconn(this);
+
+            rawQuery = myconn.execute("query","select * from class;").get();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+
+        ArrayList<String> course = parseTheData(rawQuery);
+        Toast.makeText(SummaryActivity.this, course.get(course.indexOf("course_code")+1),Toast.LENGTH_LONG).show();
         //creating progress bars
         DonutProgress graduationProgress = (DonutProgress) findViewById(R.id.donut_progress);
         ProgressBar coreProgress = (ProgressBar)findViewById(R.id.coreProgressBar);
@@ -56,16 +94,8 @@ public class SummaryActivity extends AppCompatActivity implements AsyncResponse{
 
         //TODO use data from Database
         //student and advisor info
-        student.setText("John Smith");
+        student.setText(stuName);
         adviserTextView.setText("Kay Pleasant");
-
-
-
-
-        DBconn myconn = new DBconn(this);
-        myconn.delegate = SummaryActivity.this;
-        myconn.execute("query","desc student;");
-
 
     }
     //used to call the Courses Screen
@@ -84,9 +114,22 @@ public class SummaryActivity extends AppCompatActivity implements AsyncResponse{
         startActivity(intent);
     }
 
-    @Override
-    public void processFinish(String output) {
-        //TODO Do something with the string from the database
-        Toast.makeText(this, output,Toast.LENGTH_LONG).show();
+
+    public ArrayList<String> parseTheData(String inputString){
+        ArrayList<String> matches = new ArrayList();
+        ArrayList<String> OMatches = new ArrayList();
+        Pattern pattern = Pattern.compile("(([\\w\\d\\s&@.:\\/-]+)(,){0,1}([\\w\\d\\s&@.]+))");
+        Pattern pattern2 = Pattern.compile("[{\"][\\ -z]+[\"}]");
+        Matcher matcher = pattern2.matcher(inputString);
+        while(matcher.find()) {
+            OMatches.add(matcher.group());
+        }
+        for(String thisString : OMatches) {
+            matcher = pattern.matcher(thisString);
+            while (matcher.find()) {
+                    matches.add(matcher.group());
+            }
+        }
+        return matches;
     }
 }

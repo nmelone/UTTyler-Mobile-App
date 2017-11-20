@@ -33,6 +33,7 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 import static android.Manifest.permission.READ_CONTACTS;
 import static android.content.Intent.ACTION_VIEW;
@@ -40,11 +41,13 @@ import static android.content.Intent.ACTION_VIEW;
 /**
  * A login screen that offers login via email/password.
  */
-public class LoginActivity extends AppCompatActivity implements AsyncResponse{
+public class LoginActivity extends AppCompatActivity {
 
     // UI references.
     private EditText mEmailView;
     private EditText mPasswordView;
+    String email;
+    String password;
     private static String result = "";
 
     @Override
@@ -60,11 +63,25 @@ public class LoginActivity extends AppCompatActivity implements AsyncResponse{
         mEmailSignInButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
-                String email = mEmailView.getText().toString();
-                String password = mPasswordView.getText().toString();
+                email = mEmailView.getText().toString();
+                password = mPasswordView.getText().toString();
                 DBconn dBconn = new DBconn(LoginActivity.this);
-                dBconn.delegate = LoginActivity.this;
-                dBconn.execute("login",email,password);
+
+                String output = null;
+                try {
+                    output = dBconn.execute("login",email,password).get();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                } catch (ExecutionException e) {
+                    e.printStackTrace();
+                }
+                if(output.equals("success\n")){
+                    toSummary();
+                    finish();
+                }else{
+                    Toast toast= Toast.makeText(LoginActivity.this, "Login Error", Toast.LENGTH_SHORT);
+                    toast.show();
+                }
 
             }
         });
@@ -72,22 +89,14 @@ public class LoginActivity extends AppCompatActivity implements AsyncResponse{
 
     }
 
-    @Override
-    public void processFinish(String output) {
 
-        if(output.equals("success\n")){
-            toSummary();
-            finish();
-        }else{
-            Toast toast= Toast.makeText(LoginActivity.this, "Login Error", Toast.LENGTH_SHORT);
-            toast.show();
-        }
-    }
 
     //Used to start the Summary Screen after successful login
     public void toSummary(){
 
         Intent intent = new Intent(this, SummaryActivity.class);
+        intent.putExtra("email", email);
+
         startActivity(intent);
        
     }

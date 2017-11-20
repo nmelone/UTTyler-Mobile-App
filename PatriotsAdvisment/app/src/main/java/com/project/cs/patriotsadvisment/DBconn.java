@@ -23,7 +23,7 @@ import java.net.URLEncoder;
 public class DBconn extends AsyncTask<String, Void, String> {
     Context context;
     AlertDialog alertDialog;
-    public AsyncResponse delegate = null;
+
     DBconn(Context ctx) {
         context = ctx;
     }
@@ -89,9 +89,6 @@ public class DBconn extends AsyncTask<String, Void, String> {
     }
     @Override
     protected void onPostExecute(String result) {
-
-
-        delegate.processFinish(result);
 
     }
     @Override
