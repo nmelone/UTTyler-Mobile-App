@@ -113,16 +113,6 @@ public class StringParsing {
         return OMatches;
     }
     
-    public static ArrayList SpecialParse(String inputString){
-    	ArrayList<String> OMatches = new ArrayList();
-        Pattern pattern2 = Pattern.compile("[{\"][\\ -z]+[\"}]");
-    	Matcher matcher = pattern2.matcher(inputString);
-        while(matcher.find()) {
-            OMatches.add(matcher.group());
-        }
-        return OMatches;
-    }
-    
     public static ArrayList RequirementParse(String inputString){
     	ArrayList<String> OMatches = new ArrayList();
         //Pattern pattern2 = Pattern.compile("[{\"][\\ -z]+[\"}]");
@@ -137,4 +127,45 @@ public class StringParsing {
         }
         return OMatches;
     }
+    
+    public static ArrayList DepartmentsParse(String inputString){
+    	ArrayList<String> OMatches = new ArrayList();
+        Pattern pattern2 = Pattern.compile("([\\w\\s\\d]+,[\\w\\s\\d&]+)|[\\w\\s\\d&]+");
+    	Matcher matcher = pattern2.matcher(inputString);
+        while(matcher.find()) {
+            OMatches.add(matcher.group());
+        }
+        return OMatches;
+    }
+    
+    public static ArrayList RqlncParse(String inputString){
+    	ArrayList<String> OMatches = new ArrayList();
+        Pattern pattern2 = Pattern.compile("[\\w\\s\\d]+");
+    	Matcher matcher = pattern2.matcher(inputString);
+        while(matcher.find()) {
+            OMatches.add(matcher.group());
+        }
+        return OMatches;
+    }
+    
+    public static ArrayList SpecialParse(String inputString){
+    	ArrayList<String> OMatches = new ArrayList();
+        Pattern pattern2 = Pattern.compile("[{\"][\\ -z]+[\"}]");
+    	Matcher matcher = pattern2.matcher(inputString);
+        while(matcher.find()) {
+            OMatches.add(matcher.group());
+        }
+        return OMatches;
+    }
+    
+    public static ArrayList RqlndParse(String inputString){
+    	ArrayList<String> OMatches = new ArrayList();
+        Pattern pattern2 = Pattern.compile("(([\\w\\s\\d&\\/\\(\\). \\\\ ]+,)+([\\w\\s\\d\\&\\/\\(\\). \\\\ ]+))|[\\w\\s\\d\\&\\/\\(\\). \\\\ ]+");
+    	Matcher matcher = pattern2.matcher(inputString);
+        while(matcher.find()) {
+            OMatches.add(matcher.group());
+        }
+        return OMatches;
+    }
+    
 }
