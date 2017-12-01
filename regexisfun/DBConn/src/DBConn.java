@@ -9,30 +9,43 @@ public class DBConn{
 		theArgs[0] = cin.nextLine();
 		System.out.println("Please enter a query statement:");
 		theArgs[1] = cin.nextLine();*/
+		System.out.println("Students");
 		StudentBiz();
 		SpaceBetween();
+		System.out.println("Classes");
 		ClassBiz();
 		SpaceBetween();
+		System.out.println("Courses");
 		CourseBiz();
 		SpaceBetween();
+		System.out.println("Degrees");
 		DegreeBiz();
 		SpaceBetween();
+		System.out.println("Departments");
 		DepartmentBiz();
 		SpaceBetween();
+		System.out.println("Employees");
 		EmployeeBiz();
 		SpaceBetween();
+		System.out.println("Log Files");
 		LogFileBiz();
 		SpaceBetween();
+		System.out.println("Requirements");
 		RequirementBiz();
 		SpaceBetween();
+		System.out.println("RQ LN Course?");
 		Rq_ln_courseBiz();
 		SpaceBetween();
+		System.out.println("RQ LN Transcripts?");
 		Rq_ln_transcBiz();
 		SpaceBetween();
+		System.out.println("Student Enrollments");
 		Stu_enrollBiz();
 		SpaceBetween();
+		System.out.println("Transcripts");
 		TransCourseBiz();
 		SpaceBetween();
+		System.out.println("Student Transcripts?");
 		TransStudentBiz();
 		SpaceBetween();
 		ListTables();
@@ -114,7 +127,7 @@ public class DBConn{
 		for(String i : degrees) {
 			System.out.print(i);
 			System.out.print(" , ");
-			if(q%5==0)
+			if(q%2==0)
 				System.out.println("");
 			q++;
 		}
@@ -125,12 +138,12 @@ public class DBConn{
 		theArgs[0] = "query";
 		theArgs[1] = "select * from department";
 		ActConn depConn = new ActConn(theArgs);
-		ArrayList<String> departments = StringParsing.CourseParse(depConn.makeTheConnection());
+		ArrayList<String> departments = StringParsing.SpecialParse(depConn.makeTheConnection());
 		int q = 1;
 		for(String i : departments) {
 			System.out.print(i);
 			System.out.print(" , ");
-			if(q%5==0)
+			if(q%3==0)
 				System.out.println("");
 			q++;
 		}
@@ -141,12 +154,14 @@ public class DBConn{
 		theArgs[0] = "query";
 		theArgs[1] = "select * from employee";
 		ActConn empConn = new ActConn(theArgs);
-		ArrayList<String> employees = StringParsing.CourseParse(empConn.makeTheConnection());
+		ArrayList<String> employees = StringParsing.EmployeesParse(empConn.makeTheConnection());
 		int q = 1;
 		for(String i : employees) {
-			System.out.print(i);
-			System.out.print(" , ");
-			if(q%5==0)
+			if(q%2==0&&((q-8)%10)!=0){
+				System.out.print(i);
+				System.out.print(" , ");
+			}
+			if(q%10==0)
 				System.out.println("");
 			q++;
 		}
@@ -162,7 +177,7 @@ public class DBConn{
 		for(String i : logFiles) {
 			System.out.print(i);
 			System.out.print(" , ");
-			if(q%5==0)
+			if(q%2==0)
 				System.out.println("");
 			q++;
 		}
@@ -173,12 +188,15 @@ public class DBConn{
 		theArgs[0] = "query";
 		theArgs[1] = "select * from requirement";
 		ActConn reqConn = new ActConn(theArgs);
-		ArrayList<String> requirements = StringParsing.CourseParse(reqConn.makeTheConnection());
+		ArrayList<String> requirements = StringParsing.RequirementParse(reqConn.makeTheConnection());
 		int q = 1;
 		for(String i : requirements) {
-			System.out.print(i);
-			System.out.print(" , ");
-			if(q%5==0)
+			if(q%2==0){
+				i = i.substring(1, i.length()-1);
+				System.out.print(i);
+				System.out.print(" , ");
+			}
+			if(q%6==0)
 				System.out.println("");
 			q++;
 		}
@@ -189,12 +207,12 @@ public class DBConn{
 		theArgs[0] = "query";
 		theArgs[1] = "select * from rq_ln_course";
 		ActConn rqlnConn = new ActConn(theArgs);
-		ArrayList<String> rqlns = StringParsing.CourseParse(rqlnConn.makeTheConnection());
+		ArrayList<String> rqlns = StringParsing.SpecialParse(rqlnConn.makeTheConnection());
 		int q = 1;
 		for(String i : rqlns) {
 			System.out.print(i);
 			System.out.print(" , ");
-			if(q%5==0)
+			if(q%3==0)
 				System.out.println("");
 			q++;
 		}
@@ -210,7 +228,7 @@ public class DBConn{
 		for(String i : rqlns) {
 			System.out.print(i);
 			System.out.print(" , ");
-			if(q%5==0)
+			if(q%3==0)
 				System.out.println("");
 			q++;
 		}
@@ -224,11 +242,13 @@ public class DBConn{
 		ArrayList<String> enrollments = StringParsing.CourseParse(enrConn.makeTheConnection());
 		int q = 1;
 		for(String i : enrollments) {
-			System.out.print(i);
-			System.out.print(" , ");
-			if(q%5==0)
-				System.out.println("");
-			q++;
+			if(!i.equals("1")&&!i.equals("001")){
+				System.out.print(i);
+				System.out.print(" , ");
+				if(q%4==0)
+					System.out.println("");
+				q++;
+			}
 		}
 		System.out.println("");
 	}
@@ -242,7 +262,7 @@ public class DBConn{
 		for(String i : enrollments) {
 			System.out.print(i);
 			System.out.print(" , ");
-			if(q%5==0)
+			if(q%4==0)
 				System.out.println("");
 			q++;
 		}
@@ -256,11 +276,13 @@ public class DBConn{
 		ArrayList<String> enrollments = StringParsing.CourseParse(enrConn.makeTheConnection());
 		int q = 1;
 		for(String i : enrollments) {
-			System.out.print(i);
-			System.out.print(" , ");
-			if(q%5==0)
-				System.out.println("");
-			q++;
+			if(!i.equals("1")&&!i.equals("001")){
+				System.out.print(i);
+				System.out.print(" , ");
+				if(q%4==0)
+					System.out.println("");
+				q++;
+			}
 		}
 		System.out.println("");
 	}
