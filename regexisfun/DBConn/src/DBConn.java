@@ -138,12 +138,14 @@ public class DBConn{
 		theArgs[0] = "query";
 		theArgs[1] = "select * from department";
 		ActConn depConn = new ActConn(theArgs);
-		ArrayList<String> departments = StringParsing.SpecialParse(depConn.makeTheConnection());
+		ArrayList<String> departments = StringParsing.DepartmentsParse(depConn.makeTheConnection());
 		int q = 1;
 		for(String i : departments) {
-			System.out.print(i);
-			System.out.print(" , ");
-			if(q%3==0)
+			if(q%2==0){
+				System.out.print(i);
+				System.out.print(" , ");
+			}
+			if(q%6==0)
 				System.out.println("");
 			q++;
 		}
@@ -207,12 +209,14 @@ public class DBConn{
 		theArgs[0] = "query";
 		theArgs[1] = "select * from rq_ln_course";
 		ActConn rqlnConn = new ActConn(theArgs);
-		ArrayList<String> rqlns = StringParsing.SpecialParse(rqlnConn.makeTheConnection());
+		ArrayList<String> rqlns = StringParsing.RqlndParse(rqlnConn.makeTheConnection());
 		int q = 1;
 		for(String i : rqlns) {
-			System.out.print(i);
-			System.out.print(" , ");
-			if(q%3==0)
+			if(q%2==0){
+				System.out.print(i);
+				System.out.print(" , ");
+			}
+			if(q%6==0)
 				System.out.println("");
 			q++;
 		}
