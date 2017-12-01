@@ -102,4 +102,39 @@ public class StringParsing {
         matches = OMatches;
         return matches;
     }
+    
+    public static ArrayList EmployeesParse(String inputString){
+    	ArrayList<String> OMatches = new ArrayList();
+    	Pattern pattern2 = Pattern.compile("([\\w\\s\\d]+)|\"\"");
+    	Matcher matcher = pattern2.matcher(inputString);
+        while(matcher.find()) {
+            OMatches.add(matcher.group());
+        }
+        return OMatches;
+    }
+    
+    public static ArrayList SpecialParse(String inputString){
+    	ArrayList<String> OMatches = new ArrayList();
+        Pattern pattern2 = Pattern.compile("[{\"][\\ -z]+[\"}]");
+    	Matcher matcher = pattern2.matcher(inputString);
+        while(matcher.find()) {
+            OMatches.add(matcher.group());
+        }
+        return OMatches;
+    }
+    
+    public static ArrayList RequirementParse(String inputString){
+    	ArrayList<String> OMatches = new ArrayList();
+        //Pattern pattern2 = Pattern.compile("[{\"][\\ -z]+[\"}]");
+    	Pattern pattern2 = Pattern.compile("\"[\\w\\s\\d\\(\\)\\:&.]+\"");
+    	Matcher matcher = pattern2.matcher(inputString);
+    	int i = 1;
+        while(matcher.find()) {
+        	if(i==2)
+        		OMatches.add("\"ALL COURSES (CORE\\/MAJOR\\/MINOR\\/GENERAL ELECTIVES)\"");
+            OMatches.add(matcher.group());
+            i++;
+        }
+        return OMatches;
+    }
 }
