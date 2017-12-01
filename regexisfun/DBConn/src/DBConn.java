@@ -57,9 +57,6 @@ public class DBConn{
 				q++;
 			}
 		}
-		for(String i : classes){
-			System.out.println(i);
-		}
 	}
 	
 	private static void CourseBiz(){
