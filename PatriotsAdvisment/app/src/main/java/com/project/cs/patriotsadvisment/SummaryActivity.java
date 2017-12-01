@@ -48,7 +48,7 @@ public class SummaryActivity extends AppCompatActivity{
         try {
             myconn = new DBconn(this);
 
-            rawQuery = myconn.execute("query","select * from class;").get();
+            rawQuery = myconn.execute("query","select * from course;").get();
         } catch (InterruptedException e) {
             e.printStackTrace();
         } catch (ExecutionException e) {
@@ -56,6 +56,7 @@ public class SummaryActivity extends AppCompatActivity{
         }
 
         ArrayList<String> course = parseTheData(rawQuery);
+
         Toast.makeText(SummaryActivity.this, course.get(course.indexOf("course_code")+1),Toast.LENGTH_LONG).show();
         //creating progress bars
         DonutProgress graduationProgress = (DonutProgress) findViewById(R.id.donut_progress);

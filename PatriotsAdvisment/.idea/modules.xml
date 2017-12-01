@@ -3,9 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/PatriotsAdvisment.iml" filepath="$PROJECT_DIR$/PatriotsAdvisment.iml" />
-      <module fileurl="file://C:\Users\n_mel\Documents\GitHub\UTTyler-Mobile-App\PatriotsAdvisment\PatriotsAdvisment.iml" filepath="C:\Users\n_mel\Documents\GitHub\UTTyler-Mobile-App\PatriotsAdvisment\PatriotsAdvisment.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
-      <module fileurl="file://C:\Users\n_mel\Documents\GitHub\UTTyler-Mobile-App\PatriotsAdvisment\app\app.iml" filepath="C:\Users\n_mel\Documents\GitHub\UTTyler-Mobile-App\PatriotsAdvisment\app\app.iml" />
     </modules>
   </component>
 </project>
