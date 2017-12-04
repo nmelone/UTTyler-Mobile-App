@@ -16,7 +16,15 @@ public class DBConn{
 		}
 		else
 			System.out.println("No students found by that information");
-		runTheGambit();
+		ArrayList<DegreeRequirements> degReq = Rq_ln_courseBiz();
+		ArrayList<DegreeRequirements> degReqMin = DegReqMin(degReq);
+		int totalCredits = 0;
+		for(DegreeRequirements i : degReqMin){
+			System.out.println(i);
+			totalCredits+=i.getCredits();
+		}
+		System.out.println(totalCredits + " required for degree.");
+		//runTheGambit();
 		
 	}
 	
@@ -114,8 +122,6 @@ public class DBConn{
 	
 	private static void CourseBiz(){
 		theArgs[0] = "query";
-//		theArgs[1] = "select * from course";
-//		theArgs[1] = "select course_code, name from course where dept_code = 'acct'";
 		theArgs[1] = "select course_code, name from course";
 		ActConn couConn = new ActConn(theArgs);
 		ArrayList<String> courses = StringParsing.CourseParse(couConn.makeTheConnection());
@@ -231,7 +237,6 @@ public class DBConn{
 	}
 	
 	private static ArrayList<DegreeRequirements> Rq_ln_courseBiz() {
-	//private static void Rq_ln_courseBiz() {
 		theArgs[0] = "query";
 		theArgs[1] = "select * from rq_ln_course";
 		ArrayList<String> rqlnArray = new ArrayList<>();
@@ -241,20 +246,16 @@ public class DBConn{
 		int q = 1;
 		for(String i : rqlns) {
 			if(q%2==0){
-				System.out.print(i);
-				rqlnArray.add(i);															//
-				System.out.print(" , ");
+				rqlnArray.add(i);
 			}
 			if(q%6==0) {
-				degReq.add(new DegreeRequirements(rqlnArray));								//
-				rqlnArray.clear();															//
-				System.out.println("");
+				degReq.add(new DegreeRequirements(rqlnArray));
+				rqlnArray.clear();
 			}
 			q++;
 		}
-		System.out.println("");
-		degReq = DegReqMin(degReq);															//
-		return degReq;																		//
+//		degReq = DegReqMin(degReq);
+		return degReq;
 	}
 	
 	private static ArrayList<DegreeRequirements> DegReqMin(ArrayList<DegreeRequirements> input){
@@ -267,14 +268,8 @@ public class DBConn{
 			}
 			q++;
 		}
-		SpaceBetween();
-		for(DegreeRequirements i : output) {
-			System.out.println(i);
-		}
-		SpaceBetween();
 		return output;
 	}
-	
 	
 	private static void Rq_ln_transcBiz() {
 		theArgs[0] = "query";
