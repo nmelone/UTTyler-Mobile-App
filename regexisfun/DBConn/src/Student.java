@@ -17,6 +17,7 @@ public class Student {
 		degreePlan = theMoney.get(6);
 	}
 	
+	// Getters and Setters
 	public long getNumber() {return number;}
 	public void setNumber(long number) {this.number = number;}
 	public String getFirstName() {return firstName;}
@@ -32,5 +33,5 @@ public class Student {
 	
 	public String toString(){
 		return "Student : "+firstName+" "+lastName+", # "+number+"\nID: "+id+", Email: "+email+"  Currently in "+degreePlan+" degree plan";
-	}	
+	}
 }

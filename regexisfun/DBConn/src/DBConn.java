@@ -10,8 +10,12 @@ public class DBConn{
 		System.out.println("Enter student email to login");
 		stuEmail = cin.nextLine();
 		ArrayList<Student> studentList = StudentBiz(stuEmail);
-		if(studentList.get(0)!=null)
+		if(studentList.get(0)!=null) {
 			targetStudent = studentList.get(0);
+			System.out.println(targetStudent);
+		}
+		else
+			System.out.println("No students found by that information");
 		runTheGambit();
 		
 	}
@@ -226,23 +230,51 @@ public class DBConn{
 		System.out.println("");
 	}
 	
-	private static void Rq_ln_courseBiz() {
+	private static ArrayList<DegreeRequirements> Rq_ln_courseBiz() {
+	//private static void Rq_ln_courseBiz() {
 		theArgs[0] = "query";
 		theArgs[1] = "select * from rq_ln_course";
+		ArrayList<String> rqlnArray = new ArrayList<>();
+		ArrayList<DegreeRequirements> degReq = new ArrayList<>();
 		ActConn rqlnConn = new ActConn(theArgs);
 		ArrayList<String> rqlns = StringParsing.RqlndParse(rqlnConn.makeTheConnection());
 		int q = 1;
 		for(String i : rqlns) {
 			if(q%2==0){
 				System.out.print(i);
+				rqlnArray.add(i);															//
 				System.out.print(" , ");
 			}
-			if(q%6==0)
+			if(q%6==0) {
+				degReq.add(new DegreeRequirements(rqlnArray));								//
+				rqlnArray.clear();															//
 				System.out.println("");
+			}
 			q++;
 		}
 		System.out.println("");
+		degReq = DegReqMin(degReq);															//
+		return degReq;																		//
 	}
+	
+	private static ArrayList<DegreeRequirements> DegReqMin(ArrayList<DegreeRequirements> input){
+		ArrayList<DegreeRequirements> output = new ArrayList<>();
+		int q = 0;
+		output.add(input.get(0));
+		for(DegreeRequirements i : input) {
+			if(output.get(0)!=i&&!input.get(q).getRqName().equals(input.get(q-1).getRqName())) {
+				output.add(input.get(q));
+			}
+			q++;
+		}
+		SpaceBetween();
+		for(DegreeRequirements i : output) {
+			System.out.println(i);
+		}
+		SpaceBetween();
+		return output;
+	}
+	
 	
 	private static void Rq_ln_transcBiz() {
 		theArgs[0] = "query";
