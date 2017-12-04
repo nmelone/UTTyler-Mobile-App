@@ -62,6 +62,29 @@ public class StringParsing {
     	ArrayList<String> matches = new ArrayList();
         ArrayList<String> OMatches = new ArrayList();
         Pattern pattern2 = Pattern.compile("[{\"][\\ -z]+[\"}]");
+        //Pattern pattern3 = Pattern.compile("[\\w\\s\\d.]+");
+        Pattern pattern3 = Pattern.compile("([\\w\\s\\d\\\\\\/&-]+),([\\w\\s\\d\\\\\\/&-]+)|([\\w\\s\\d\\\\\\/&-(\u002E)(\u005B)(\u005D)\\[\\]]{2,})");
+        Matcher matcher = pattern2.matcher(inputString);
+        while(matcher.find()) {
+            OMatches.add(matcher.group());
+        }
+        for(String thisString : OMatches) {
+        	matcher = pattern3.matcher(thisString);
+        	int i = 0;
+        	while (matcher.find()) {
+        		if(i%2!=0) {
+        			matches.add(matcher.group());
+        		}
+        		i++;
+        	}
+        }
+        return matches;
+    }
+    
+    public static ArrayList CourselessParse(String inputString){
+    	ArrayList<String> matches = new ArrayList();
+        ArrayList<String> OMatches = new ArrayList();
+        Pattern pattern2 = Pattern.compile("[{\"][\\ -z]+[\"}]");
         Pattern pattern3 = Pattern.compile("[\\w\\s\\d.]+");
         Matcher matcher = pattern2.matcher(inputString);
         while(matcher.find()) {

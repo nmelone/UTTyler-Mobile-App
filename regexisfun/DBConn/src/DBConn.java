@@ -2,15 +2,23 @@ import java.util.Scanner;
 import java.util.ArrayList;
 
 public class DBConn{
+	static String stuEmail;
 	static String[] theArgs = new String[3];
+	static Student targetStudent;
 	public static void main(String[] args) {
-/*		Scanner cin = new Scanner(System.in);
-		System.out.println("Please state your purpose (login,query");
-		theArgs[0] = cin.nextLine();
-		System.out.println("Please enter a query statement:");
-		theArgs[1] = cin.nextLine();*/
+		Scanner cin = new Scanner(System.in);
+		System.out.println("Enter student email to login");
+		stuEmail = cin.nextLine();
+		ArrayList<Student> studentList = StudentBiz(stuEmail);
+		if(studentList.get(0)!=null)
+			targetStudent = studentList.get(0);
+		runTheGambit();
+		
+	}
+	
+	public static void runTheGambit(){
 		System.out.println("Students");
-		StudentBiz();
+		ArrayList<Student> studentList = StudentBiz(stuEmail);
 		SpaceBetween();
 		System.out.println("Classes");
 		ClassBiz();
@@ -49,6 +57,9 @@ public class DBConn{
 		TransStudentBiz();
 		SpaceBetween();
 		ListTables();
+		for(Student i : studentList){
+			System.out.println(i.toString());
+		}
 	}
 	
 	public static void SpaceBetween(){
@@ -57,21 +68,24 @@ public class DBConn{
 		System.out.println("");
 	}
 	
-	private static void StudentBiz(){
+	private static ArrayList<Student> StudentBiz(String inputEmail){
 		theArgs[0] = "query";
-		theArgs[1] = "select * from student";
+		theArgs[1] = "select * from student where email = '"+inputEmail+"'";
 		theArgs[2] = null;
 		ActConn stuConn = new ActConn(theArgs);
 		ArrayList<String> students = StringParsing.StudentParse(stuConn.makeTheConnection());
+		ArrayList<Student> studentList = new ArrayList<>();
+		ArrayList<String> buildStuList = new ArrayList<>();
 		int q = 1;
 		for(String i : students){
-			System.out.print(i);
-			System.out.print(" , ");
-			if(q%7==0)
-				System.out.println(" ");
+			buildStuList.add(i);
+			if(q%7==0){
+				studentList.add(new Student(buildStuList));
+				buildStuList.clear();
+			}
 			q++;
 		}
-		System.out.println("");
+		return studentList;
 	}
 	
 	private static void ClassBiz(){
@@ -96,12 +110,19 @@ public class DBConn{
 	
 	private static void CourseBiz(){
 		theArgs[0] = "query";
-		theArgs[1] = "select * from course";
+//		theArgs[1] = "select * from course";
+//		theArgs[1] = "select course_code, name from course where dept_code = 'acct'";
+		theArgs[1] = "select course_code, name from course";
 		ActConn couConn = new ActConn(theArgs);
 		ArrayList<String> courses = StringParsing.CourseParse(couConn.makeTheConnection());
 		int q = 1;
 		for(String i : courses){
-			System.out.println(i);
+			System.out.print(i);
+			if(q%2==0)
+				System.out.println(" ");
+			else
+				System.out.print(" : ");
+			q++;
 		}
 		System.out.println("");
 	}
@@ -122,7 +143,7 @@ public class DBConn{
 		theArgs[0] = "query";
 		theArgs[1] = "select * from degree";
 		ActConn degConn = new ActConn(theArgs);
-		ArrayList<String> degrees = StringParsing.CourseParse(degConn.makeTheConnection());
+		ArrayList<String> degrees = StringParsing.CourselessParse(degConn.makeTheConnection());
 		int q = 1;
 		for(String i : degrees) {
 			System.out.print(i);
@@ -174,7 +195,7 @@ public class DBConn{
 		theArgs[0] = "query";
 		theArgs[1] = "select * from logfile";
 		ActConn logConn = new ActConn(theArgs);
-		ArrayList<String> logFiles = StringParsing.CourseParse(logConn.makeTheConnection());
+		ArrayList<String> logFiles = StringParsing.CourselessParse(logConn.makeTheConnection());
 		int q = 1;
 		for(String i : logFiles) {
 			System.out.print(i);
@@ -227,7 +248,7 @@ public class DBConn{
 		theArgs[0] = "query";
 		theArgs[1] = "select * from rq_ln_transc";
 		ActConn rqlnConn = new ActConn(theArgs);
-		ArrayList<String> rqlns = StringParsing.CourseParse(rqlnConn.makeTheConnection());
+		ArrayList<String> rqlns = StringParsing.CourselessParse(rqlnConn.makeTheConnection());
 		int q = 1;
 		for(String i : rqlns) {
 			System.out.print(i);
@@ -243,7 +264,7 @@ public class DBConn{
 		theArgs[0] = "query";
 		theArgs[1] = "select * from stu_enroll";
 		ActConn enrConn = new ActConn(theArgs);
-		ArrayList<String> enrollments = StringParsing.CourseParse(enrConn.makeTheConnection());
+		ArrayList<String> enrollments = StringParsing.CourselessParse(enrConn.makeTheConnection());
 		int q = 1;
 		for(String i : enrollments) {
 			if(!i.equals("1")&&!i.equals("001")){
@@ -261,7 +282,7 @@ public class DBConn{
 		theArgs[0] = "query";
 		theArgs[1] = "select * from trans_course";
 		ActConn enrConn = new ActConn(theArgs);
-		ArrayList<String> enrollments = StringParsing.CourseParse(enrConn.makeTheConnection());
+		ArrayList<String> enrollments = StringParsing.CourselessParse(enrConn.makeTheConnection());
 		int q = 1;
 		for(String i : enrollments) {
 			System.out.print(i);
@@ -275,15 +296,15 @@ public class DBConn{
 	
 	private static void TransStudentBiz() {
 		theArgs[0] = "query";
-		theArgs[1] = "select * from stu_enroll";
+		theArgs[1] = "select * from trans_stu";
 		ActConn enrConn = new ActConn(theArgs);
-		ArrayList<String> enrollments = StringParsing.CourseParse(enrConn.makeTheConnection());
+		ArrayList<String> enrollments = StringParsing.CourselessParse(enrConn.makeTheConnection());
 		int q = 1;
 		for(String i : enrollments) {
 			if(!i.equals("1")&&!i.equals("001")){
 				System.out.print(i);
 				System.out.print(" , ");
-				if(q%4==0)
+				if(q%3==0)
 					System.out.println("");
 				q++;
 			}
