@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -32,32 +33,61 @@ public class SummaryActivity extends AppCompatActivity{
         setContentView(R.layout.activity_summary);
 
         String email = getIntent().getExtras().getString("email");
+        rawQuery = makeQuery("select * from student where email = '"+ email + "';");
 
-        DBconn myconn = new DBconn(this);
-
-        try {
-            rawQuery = myconn.execute("query","select * from student where email = '"+ email + "';").get();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        } catch (ExecutionException e) {
-            e.printStackTrace();
-        }
         ArrayList<String> studentarry = parseTheData(rawQuery);
         stuName = studentarry.get(studentarry.indexOf("fname")+1) + " " + studentarry.get(studentarry.indexOf("lname")+1);
 
-        try {
-            myconn = new DBconn(this);
+        //gets credits for classes being taken currently
+        rawQuery = makeQuery("select unit from student natural join stu_enroll natural join course natural join rq_ln_course natural join requirement where email = '"+ email + "' and (grade = 'null' or grade = '');");
+        Double taking = 0.0;
+        if(rawQuery != null) {
+            ArrayList<String> classesTaking = parseTheData(rawQuery);
 
-            rawQuery = myconn.execute("query","select * from course;").get();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        } catch (ExecutionException e) {
-            e.printStackTrace();
+            for (int i = 1; i < classesTaking.size(); i += 2) {
+                taking += Double.parseDouble(classesTaking.get(i));
+            }
         }
 
-        ArrayList<String> course = parseTheData(rawQuery);
 
-        Toast.makeText(SummaryActivity.this, course.get(course.indexOf("course_code")+1),Toast.LENGTH_LONG).show();
+
+        //gets credits for classes enrolled
+        rawQuery = makeQuery("select unit from student natural join stu_enroll natural join course natural join rq_ln_course natural join requirement where email = '"+ email + "';");
+        Double taken = 0.0;
+        if(rawQuery != null) {
+            ArrayList<String> classesTaken = parseTheData(rawQuery);
+
+            for (int i = 1; i < classesTaken.size(); i += 2) {
+                taken += Double.parseDouble(classesTaken.get(i));
+            }
+        }
+
+
+
+        //gets credits for classes transferred
+        rawQuery = makeQuery("select unit from student natural join trans_stu natural join trans_course natural join rq_ln_transc natural join requirement where email = '"+ email + "';");
+        Double trans = 0.0;
+        if(rawQuery != null) {
+            ArrayList<String> classesTrans = parseTheData(rawQuery);
+
+            for (int i = 1; i < classesTrans.size(); i += 2) {
+                trans += Double.parseDouble(classesTrans.get(i));
+            }
+        }
+
+        // gets credits for classes taken that are labelled core
+        rawQuery = makeQuery("select unit from student natural join stu_enroll natural join course natural join rq_ln_course natural join requirement where email = '"+ email + "' and rq_code = 'rq 1159';");
+        Double coreTaken = 0.0;
+        if(rawQuery != null) {
+            ArrayList<String> coreTakenArray = parseTheData(rawQuery);
+
+            for (int i = 1; i < coreTakenArray.size(); i += 2) {
+                coreTaken += Double.parseDouble(coreTakenArray.get(i));
+            }
+        }
+        //gets credits for classes labelled core
+
+
         //creating progress bars
         DonutProgress graduationProgress = (DonutProgress) findViewById(R.id.donut_progress);
         ProgressBar coreProgress = (ProgressBar)findViewById(R.id.coreProgressBar);
@@ -76,10 +106,10 @@ public class SummaryActivity extends AppCompatActivity{
 
         //setting progress
         //TODO use data from Database
-        graduationProgress.setProgress((int)(Math.random()*100));
+        graduationProgress.setProgress((int)(((taken - taking) / 120)*100));
         coreProgress.setProgress((int)(Math.random()*100));
         degreeProgress.setProgress((int)(Math.random()*100));
-        overallProgress.setProgress((int)(Math.random()*100));
+        overallProgress.setProgress((int)(((taken - taking + trans) / 120)*100));
 
         //setting percent label
         corePercent.setText(coreProgress.getProgress() + "%");
@@ -115,7 +145,7 @@ public class SummaryActivity extends AppCompatActivity{
         startActivity(intent);
     }
 
-
+    //used to get data from a raw query return
     public ArrayList<String> parseTheData(String inputString){
         ArrayList<String> matches = new ArrayList();
         ArrayList<String> OMatches = new ArrayList();
@@ -132,5 +162,19 @@ public class SummaryActivity extends AppCompatActivity{
             }
         }
         return matches;
+    }
+    //used to make a query and get a return
+    private String makeQuery(String s){
+        String output = "";
+        try {
+            DBconn myconn = new DBconn(this);
+
+            output = myconn.execute("query",s).get();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+        return output;
     }
 }

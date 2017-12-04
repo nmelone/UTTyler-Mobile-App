@@ -43,7 +43,7 @@ public class CoursesActivity extends Activity {
 
         //adding all the headers to the header list
         listCoursesHeader.add("Freshman Courses");
-        listCoursesHeader.add("Sopohmore Courses");
+        listCoursesHeader.add("Sophomore Courses");
         listCoursesHeader.add("Junior Courses");
         listCoursesHeader.add("Senior Courses");
 
