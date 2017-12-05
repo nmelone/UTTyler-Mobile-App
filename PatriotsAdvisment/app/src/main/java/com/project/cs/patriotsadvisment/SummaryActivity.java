@@ -4,16 +4,10 @@ import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.github.lzyzsd.circleprogress.DonutProgress;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.concurrent.ExecutionException;
@@ -22,9 +16,6 @@ import java.util.regex.Pattern;
 
 public class SummaryActivity extends AppCompatActivity{
 
-    private TextView adviserTextView;
-
-    public static final String EXTRA_ADVISER = "com.project.cs.patriotsadvisment.ADVISER";
     String rawQuery;
     String stuName;
     @Override
@@ -49,8 +40,6 @@ public class SummaryActivity extends AppCompatActivity{
             }
         }
 
-
-
         //gets credits for classes enrolled
         rawQuery = makeQuery("select unit from student natural join stu_enroll natural join course natural join rq_ln_course natural join requirement where email = '"+ email + "';");
         Double taken = 0.0;
@@ -61,8 +50,6 @@ public class SummaryActivity extends AppCompatActivity{
                 taken += Double.parseDouble(classesTaken.get(i));
             }
         }
-
-
 
         //gets credits for classes transferred
         rawQuery = makeQuery("select unit from student natural join trans_stu natural join trans_course natural join rq_ln_transc natural join requirement where email = '"+ email + "';");
@@ -85,48 +72,119 @@ public class SummaryActivity extends AppCompatActivity{
                 coreTaken += Double.parseDouble(coreTakenArray.get(i));
             }
         }
+        // gets credits for trans classes taken that are labelled core
+        rawQuery = makeQuery("select unit from trans_stu natural join trans_course natural join rq_ln_transc natural join requirement where email = '"+ email + "' and rq_code = 'rq 1159';");
+        Double coreTransTaken = 0.0;
+        if(rawQuery != null) {
+            ArrayList<String> coreTransTakenArray = parseTheData(rawQuery);
+
+            for (int i = 1; i < coreTransTakenArray.size(); i += 2) {
+                coreTaken += Double.parseDouble(coreTransTakenArray.get(i));
+            }
+        }
         //gets credits for classes labelled core
+        rawQuery = makeQuery("select unit from course natural join rq_ln_course natural join requirement where rq_code = 'rq 1159';");
+        Double coreTotal = 0.0;
+        if(rawQuery != null){
+            ArrayList<String> coreTotalArray = parseTheData(rawQuery);
+            for (int i = 1; i < coreTotalArray.size(); i += 2) {
+                coreTotal += Double.parseDouble(coreTotalArray.get(i));
+            }
+        }
+
+        // gets credits for classes taken that are labelled lower
+        rawQuery = makeQuery("select unit from student natural join stu_enroll natural join course natural join rq_ln_course natural join requirement where email = '"+ email + "' and rq_code = 'rq 1156';");
+        Double lowerTaken = 0.0;
+        if(rawQuery != null) {
+            ArrayList<String> lowerTakenArray = parseTheData(rawQuery);
+
+            for (int i = 1; i < lowerTakenArray.size(); i += 2) {
+                lowerTaken += Double.parseDouble(lowerTakenArray.get(i));
+            }
+        }
+        // gets credits for trans classes taken that are labelled lower
+        rawQuery = makeQuery("select unit from trans_stu natural join trans_course natural join rq_ln_transc natural join requirement where email = '"+ email + "' and rq_code = 'rq 1156';");
+        Double lowerTransTaken = 0.0;
+        if(rawQuery != null) {
+            ArrayList<String> lowerTransTakenArray = parseTheData(rawQuery);
+
+            for (int i = 1; i < lowerTransTakenArray.size(); i += 2) {
+                coreTaken += Double.parseDouble(lowerTransTakenArray.get(i));
+            }
+        }
+        //gets credits for classes labelled lower
+        rawQuery = makeQuery("select unit from course natural join rq_ln_course natural join requirement where rq_code = 'rq 1156';");
+        Double lowerTotal = 0.0;
+        if(rawQuery != null){
+            ArrayList<String> lowerTotalArray = parseTheData(rawQuery);
+            for (int i = 1; i < lowerTotalArray.size(); i += 2) {
+                coreTotal += Double.parseDouble(lowerTotalArray.get(i));
+            }
+        }
+
+        // gets credits for classes taken that are labelled upper
+        rawQuery = makeQuery("select unit from student natural join stu_enroll natural join course natural join rq_ln_course natural join requirement where email = '"+ email + "' and rq_code = 'rq 1157';");
+        Double upperTaken = 0.0;
+        if(rawQuery != null) {
+            ArrayList<String> upperTakenArray = parseTheData(rawQuery);
+
+            for (int i = 1; i < upperTakenArray.size(); i += 2) {
+                upperTaken += Double.parseDouble(upperTakenArray.get(i));
+            }
+        }
+        // gets credits for trans classes taken that are labelled lupper
+        rawQuery = makeQuery("select unit from trans_stu natural join trans_course natural join rq_ln_transc natural join requirement where email = '"+ email + "' and rq_code = 'rq 1157';");
+        Double upperTransTaken = 0.0;
+        if(rawQuery != null) {
+            ArrayList<String> upperTransTakenArray = parseTheData(rawQuery);
+
+            for (int i = 1; i < upperTransTakenArray.size(); i += 2) {
+                upperTaken += Double.parseDouble(upperTransTakenArray.get(i));
+            }
+        }
+        //gets credits for classes labelled upper
+        rawQuery = makeQuery("select unit from course natural join rq_ln_course natural join requirement where rq_code = 'rq 1157';");
+        Double upperTotal = 0.0;
+        if(rawQuery != null){
+            ArrayList<String> upperTotalArray = parseTheData(rawQuery);
+            for (int i = 1; i < upperTotalArray.size(); i += 2) {
+                upperTotal += Double.parseDouble(upperTotalArray.get(i));
+            }
+        }
 
 
         //creating progress bars
         DonutProgress graduationProgress = (DonutProgress) findViewById(R.id.donut_progress);
         ProgressBar coreProgress = (ProgressBar)findViewById(R.id.coreProgressBar);
-        ProgressBar degreeProgress = (ProgressBar)findViewById(R.id.degreeProgressBar);
-        ProgressBar overallProgress = (ProgressBar)findViewById(R.id.overallProgressBar);
+        ProgressBar upperProgress = (ProgressBar)findViewById(R.id.upperProgressBar);
+        ProgressBar lowerProgress = (ProgressBar)findViewById(R.id.lowerProgressBar);
 
         //creating percent labels
         TextView corePercent = (TextView)findViewById(R.id.corePercent);
-        TextView degreePercent = (TextView)findViewById(R.id.degreePercent);
-        TextView overallPercent = (TextView)findViewById(R.id.overallPercent);
+        TextView degreePercent = (TextView)findViewById(R.id.upperPercent);
+        TextView overallPercent = (TextView)findViewById(R.id.lowerPercent);
 
         //creating student, advisor, and gpa textviews
         TextView student = (TextView)findViewById(R.id.student);
-        TextView gpa = (TextView)findViewById(R.id.gpaText);
-        adviserTextView = (TextView)findViewById(R.id.advisernameTextView);
+
 
         //setting progress
         //TODO use data from Database
         graduationProgress.setProgress((int)(((taken - taking) / 120)*100));
-        coreProgress.setProgress((int)(Math.random()*100));
-        degreeProgress.setProgress((int)(Math.random()*100));
-        overallProgress.setProgress((int)(((taken - taking + trans) / 120)*100));
+        coreProgress.setProgress((int)(((coreTaken + coreTransTaken)/coreTotal)*100));
+        upperProgress.setProgress((int)(((upperTaken + upperTransTaken)/upperTotal)*100));
+        lowerProgress.setProgress((int)(((lowerTaken + lowerTransTaken)/lowerTotal)*100));
 
         //setting percent label
         corePercent.setText(coreProgress.getProgress() + "%");
-        degreePercent.setText(degreeProgress.getProgress() + "%");
-        overallPercent.setText(overallProgress.getProgress() + "%");
+        degreePercent.setText(upperProgress.getProgress() + "%");
+        overallPercent.setText(lowerProgress.getProgress() + "%");
 
-        //dirty way to get two decimal places likely to be removed
-        double gpaNumber = Math.random()*4;
-        gpaNumber = Math.round(gpaNumber*100.00);
-        gpaNumber = gpaNumber/100;
-        Double gpaText = gpaNumber;
-        gpa.setText(gpaText.toString());
 
         //TODO use data from Database
         //student and advisor info
         student.setText(stuName);
-        adviserTextView.setText("Kay Pleasant");
+
 
     }
     //used to call the Courses Screen
@@ -136,14 +194,7 @@ public class SummaryActivity extends AppCompatActivity{
         startActivity(intent);
     }
 
-    //used to call the Adviser Screen
-    public void startAdvisor(View myView){
-        //TODO add any data to the intent as needed
-        Intent intent = new Intent(this,AdviserActivity.class);
-        String advisor = adviserTextView.getText().toString();
-        intent.putExtra(EXTRA_ADVISER, advisor);
-        startActivity(intent);
-    }
+
 
     //used to get data from a raw query return
     public ArrayList<String> parseTheData(String inputString){

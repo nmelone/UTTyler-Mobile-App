@@ -34,6 +34,8 @@ public class CoursesActivity extends Activity {
         //setting list adapter
         coursesEL.setAdapter(listAdapter);
 
+        //gets all classes for a degree plan that aren't electives
+        //select course_code from course natural join rq_ln_course natural join requirement where degree_name = 'computer information systems' and (rq_code != 'rq 1161' or rq_code != 'rq 1158') order by course_code
     }
 
     private void prepareListData(){

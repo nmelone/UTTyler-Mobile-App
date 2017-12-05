@@ -14,8 +14,9 @@
         completions."
     </string>
     <string name="core">Core</string>
-    <string name="degree">Degree</string>
-    <string name="overall">Overall</string>
+    <string name="upper">Upper Division</string>
+    <string name="lower">Lower Division</string>
+    <string name="overall">Overall Progress</string>
     <string name="student">Placeholder Student</string>
     <string name="gpalabel">GPA</string>
     <string name="advisor">Adviser: </string>
