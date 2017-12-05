@@ -52,7 +52,7 @@ public class CoursesActivity extends Activity {
         listCoursesHeader.add("Junior Courses");
         listCoursesHeader.add("Senior Courses");
 
-
+        String previous = "";
         //gets all classes for a degree plan that aren't electives
         rawQuery = makeQuery("select name from course natural join rq_ln_course natural join requirement where degree_name = 'computer information systems' and (rq_code != 'rq 1161' and rq_code != 'rq 1158') and course_code like '____ 1___' order by course_code;");
         ArrayList<String> rawFreshmanArray = parseTheData(rawQuery);
@@ -61,7 +61,9 @@ public class CoursesActivity extends Activity {
         //TODO change all the adding to a loop that gets data from database
         List<String> freshman = new ArrayList<String>();
         for(int i = 1; i < rawFreshmanArray.size(); i+=2){
-            freshman.add(rawFreshmanArray.get(i));
+            if(!previous.equals(rawFreshmanArray.get(i)))
+                freshman.add(rawFreshmanArray.get(i));
+                previous = rawFreshmanArray.get(i);
         }
 
         //gets all classes for a degree plan that aren't electives
@@ -70,7 +72,9 @@ public class CoursesActivity extends Activity {
         List<String> sophomore = new ArrayList<String>();
 
         for(int i = 1; i < rawSophomoreArray.size(); i+=2){
-            sophomore.add(rawSophomoreArray.get(i));
+            if(!previous.equals(rawSophomoreArray.get(i)))
+                sophomore.add(rawSophomoreArray.get(i));
+                previous = rawSophomoreArray.get(i);
         }
 
         //gets all classes for a degree plan that aren't electives
@@ -78,14 +82,19 @@ public class CoursesActivity extends Activity {
         ArrayList<String> rawJuniorArray = parseTheData(rawQuery);
         List<String> junior = new ArrayList<String>();
         for(int i = 1; i < rawJuniorArray.size(); i+=2){
-            junior.add(rawJuniorArray.get(i));
+            if(!previous.equals(rawJuniorArray.get(i)))
+                junior.add(rawJuniorArray.get(i));
+                previous = rawJuniorArray.get(i);
         }
 
         rawQuery = makeQuery("select name from course natural join rq_ln_course natural join requirement where degree_name = 'computer information systems' and (rq_code != 'rq 1161' and rq_code != 'rq 1158') and course_code like '____ 4___' order by course_code;");
         ArrayList<String> rawSeniorArray = parseTheData(rawQuery);
         List<String> senior = new ArrayList<String>();
         for(int i = 1; i < rawSeniorArray.size(); i+=2){
-            senior.add(rawSeniorArray.get(i));
+            if(!previous.equals(rawSeniorArray.get(i)))
+                senior.add(rawSeniorArray.get(i));
+                previous = rawSeniorArray.get(i);
+
         }
 
         //putting all the children into the right list
@@ -98,7 +107,7 @@ public class CoursesActivity extends Activity {
     public ArrayList<String> parseTheData(String inputString){
         ArrayList<String> matches = new ArrayList();
         ArrayList<String> OMatches = new ArrayList();
-        Pattern pattern = Pattern.compile("(([\\w\\d\\s&@.:\\/-]+)(,){0,1}([\\w\\d\\s&@.]+))");
+        Pattern pattern = Pattern.compile("(([\\w\\d\\s&@.:\\\\/-]+)(,){0,1}([\\w\\d\\s&@.\\\\/-]+))");
         Pattern pattern2 = Pattern.compile("[{\"][\\ -z]+[\"}]");
         Matcher matcher = pattern2.matcher(inputString);
         while(matcher.find()) {
